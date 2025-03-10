@@ -1,51 +1,145 @@
-import React, { useState } from "react";
+import React, { Children, useEffect, useState } from "react";
 import "./ProductTable.css";
 import DeleteModal from "../DeleteModal/DeleteModal";
 import DeatailsModal from "../DeatailsModal/DeatailsModal";
+import EditModal from "../EditModal/EditModal";
+import { AiOutlineDollarCircle } from "react-icons/ai";
+import ErrorBox from "../ErrorBox/ErrorBox";
+
 export default function ProductsTable() {
-    
-    const [isShowModal , setIsShowModal] = useState(false);
-    const [isShowDetailsModal , setIsShowDetailsModal] = useState(false);
+  const [isShowModal, setIsShowModal] = useState(false);
+  const [isShowDetailsModal, setIsShowDetailsModal] = useState(false);
+  const [isShowEditModal, setIsShowEditModal] = useState(false);
+  const [allProducts, setAllProducts] = useState([]);
+  useEffect(() => {
+    fetch("http://localhost:8000/api/products")
+      .then((res) => res.json())
+      .then((products) => setAllProducts(products));
+  }, []);
 
-    const submitAction = () => {
-        setIsShowModal(false)
-    }
-    const cancelAction = () => {
-        setIsShowModal(false)
-    }
-    const closeDetailsModal = () => {
-      setIsShowDetailsModal(false)
-    }
-    return (
+  const submitAction = () => {
+    setIsShowModal(false);
+  };
+  const cancelAction = () => {
+    setIsShowModal(false);
+  };
+  const closeDetailsModal = () => {
+    setIsShowDetailsModal(false);
+  };
+  const updateProductInfos = (event) => {
+    // setIsShowEditModal(false)
+    event.preventDefault();
+    console.log("مدال بسته شد");
+  };
+
+  return (
     <>
-      <table className="products-table">
-        <tr className="products-table-heading-tr">
-          <th>عکس</th>
-          <th>اسم</th>
-          <th>قیمت</th>
-          <th>موجودی</th>
-        </tr>
 
-        <tr className="products-table-tr">
-          <td>
-            <img
-              src="/img/oil.jpeg"
-              alt="oil img"
-              className="products-table-img"
-            />
-          </td>
-          <td>روغن سرخ کردنی</td>
-          <td>92000 تومان</td>
-          <td>82</td>
-          <td>
-            <button className="products-table-btn" onClick={() => setIsShowDetailsModal(true)}>جزییات</button>
-            <button className="products-table-btn" onClick={() => setIsShowModal(true)}>حذف</button>
-            <button className="products-table-btn">ویرایش</button>
-          </td>
-        </tr>
+    {
+      allProducts.length ? (
+        <table className="products-table">
+        <thead>
+          <tr className="products-table-heading-tr">
+            <th>عکس</th>
+            <th>اسم</th>
+            <th>قیمت</th>
+            <th>موجودی</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {allProducts.map((products) => (
+            <tr className="products-table-tr" key={products.id}>
+              <td>
+                <img
+                  src={products.img}
+                  alt="oil img"
+                  className="products-table-img"
+                />
+              </td>
+              <td>{products.title}</td>
+              <td>{products.price}</td>
+              <td>{products.count}</td>
+              <td>
+                <button
+                  className="products-table-btn"
+                  onClick={() => setIsShowDetailsModal(true)}
+                >
+                  جزییات
+                </button>
+                <button
+                  className="products-table-btn"
+                  onClick={() => setIsShowModal(true)}
+                >
+                  حذف
+                </button>
+                <button
+                  className="products-table-btn"
+                  onClick={() => setIsShowEditModal(true)}
+                >
+                  ویرایش
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
       </table>
-      {isShowModal && <DeleteModal submit={cancelAction} cancel={submitAction}/>}
-      {isShowDetailsModal && <DeatailsModal onHide= {closeDetailsModal}/>}
+      ) : (<ErrorBox msg="هیچ محصولی یافت نشد" />)
+    }
+
+      
+      {isShowModal && (
+        <DeleteModal submit={cancelAction} cancel={submitAction} />
+      )}
+      {isShowDetailsModal && <DeatailsModal onHide={closeDetailsModal} />}
+      {isShowEditModal && (
+        <EditModal
+          onClose={() => setIsShowEditModal(false)}
+          onSubmit={updateProductInfos}
+        >
+          {/* {Children} */}
+          <div className="edit-proructs-form-group">
+            <span>
+              <AiOutlineDollarCircle />
+            </span>
+            <input
+              type="text"
+              placeholder="عنوان جدید را وارد کنید"
+              className="edit-product-input"
+            />
+          </div>
+          <div className="edit-proructs-form-group">
+            <span>
+              <AiOutlineDollarCircle />
+            </span>
+            <input
+              type="text"
+              placeholder="عنوان جدید را وارد کنید"
+              className="edit-product-input"
+            />
+          </div>
+          <div className="edit-proructs-form-group">
+            <span>
+              <AiOutlineDollarCircle />
+            </span>
+            <input
+              type="text"
+              placeholder="عنوان جدید را وارد کنید"
+              className="edit-product-input"
+            />
+          </div>
+          <div className="edit-proructs-form-group">
+            <span>
+              <AiOutlineDollarCircle />
+            </span>
+            <input
+              type="text"
+              placeholder="عنوان جدید را وارد کنید"
+              className="edit-product-input"
+            />
+          </div>
+        </EditModal>
+      )}
     </>
   );
 }
