@@ -24,7 +24,7 @@ export default function Header() {
             <button className='header-left-icon'>
                 <AiOutlineBell />
             </button>
-            <button className='header-left-icon'>https://github.com/gh-ashkan/basic-dashboar-admin.git
+            <button className='header-left-icon'>
                 <BsBrightnessHigh />
             </button>
         </div>
