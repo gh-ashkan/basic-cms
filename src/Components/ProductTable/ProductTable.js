@@ -11,14 +11,29 @@ export default function ProductsTable() {
   const [isShowDetailsModal, setIsShowDetailsModal] = useState(false);
   const [isShowEditModal, setIsShowEditModal] = useState(false);
   const [allProducts, setAllProducts] = useState([]);
+  const [ProductsId, setProductsId] = useState(null);
+
   useEffect(() => {
+    getAllProducts()
+  }, []);
+
+  const getAllProducts = () => {
     fetch("http://localhost:8000/api/products")
       .then((res) => res.json())
       .then((products) => setAllProducts(products));
-  }, []);
+  }
 
   const submitAction = () => {
+    console.log('مدال تایید شد')
+    fetch(`http://localhost:8000/api/products/${ProductsId}`, {
+      method: 'DELETE'
+    }).then(res => res.json())
+    .then(result => {
     setIsShowModal(false);
+    getAllProducts()
+  })
+    
+    
   };
   const cancelAction = () => {
     setIsShowModal(false);
@@ -69,13 +84,16 @@ export default function ProductsTable() {
                 </button>
                 <button
                   className="products-table-btn"
-                  onClick={() => setIsShowModal(true)}
+                  onClick={() => { setIsShowModal(true)
+                                  setProductsId(products.id)
+                  }}
+                  
                 >
                   حذف
                 </button>
                 <button
                   className="products-table-btn"
-                  onClick={() => setIsShowEditModal(true)}
+                  onClick={() => setIsShowEditModal(true)}  
                 >
                   ویرایش
                 </button>
@@ -89,7 +107,7 @@ export default function ProductsTable() {
 
       
       {isShowModal && (
-        <DeleteModal submit={cancelAction} cancel={submitAction} />
+        <DeleteModal submit={submitAction} cancel={cancelAction} />
       )}
       {isShowDetailsModal && <DeatailsModal onHide={closeDetailsModal} />}
       {isShowEditModal && (
