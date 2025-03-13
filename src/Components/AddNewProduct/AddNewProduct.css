@@ -20,7 +20,7 @@
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px 15px;
+    gap: 10px 45px;
 }
 
 .add-products-form-group {
