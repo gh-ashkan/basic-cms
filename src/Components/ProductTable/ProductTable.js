@@ -6,11 +6,10 @@ import EditModal from "../EditModal/EditModal";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import ErrorBox from "../ErrorBox/ErrorBox";
 
-export default function ProductsTable() {
+export default function ProductsTable({allProducts , getAllProducts}) {
   const [isShowModal, setIsShowModal] = useState(false);
   const [isShowDetailsModal, setIsShowDetailsModal] = useState(false);
   const [isShowEditModal, setIsShowEditModal] = useState(false);
-  const [allProducts, setAllProducts] = useState([]);
   const [ProductsId, setProductsId] = useState(null);
   const [mainProductInfos, setMainProductInfos] = useState({});
 
@@ -22,15 +21,7 @@ export default function ProductsTable() {
   const [productNewSale, setProductNewSale] = useState("");
   const [productNewColors, setProductNewColors] = useState("");
 
-  useEffect(() => {
-    getAllProducts();
-  }, []);
 
-  const getAllProducts = () => {
-    fetch("http://localhost:8000/api/products")
-      .then((res) => res.json())
-      .then((products) => setAllProducts(products));
-  };
 
   const submitAction = () => {
     console.log("مدال تایید شد");
@@ -162,7 +153,7 @@ export default function ProductsTable() {
               <th>رنگ بندی</th>
             </tr>
             <tr>
-              <td>{mainProductInfos.popularity}</td>
+              <td>{mainProductInfos.popularity}%</td>
               <td>{mainProductInfos.sale}</td>
               <td>{mainProductInfos.colors}</td>
             </tr>
