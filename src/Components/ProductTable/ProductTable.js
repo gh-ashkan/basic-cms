@@ -142,7 +142,7 @@ export default function ProductsTable({allProducts , getAllProducts}) {
       )}
 
       {isShowModal && (
-        <DeleteModal submit={submitAction} cancel={cancelAction} />
+        <DeleteModal submit={submitAction} cancel={cancelAction} title='ایااز حذف اطمینان دارید؟' />
       )}
       {isShowDetailsModal && (
         <DeatailsModal onHide={closeDetailsModal}>
